@@ -36,7 +36,7 @@ const checkUserToAdd = (user) => {
   return checkKeys && repeatCheck && checkValues;
 };
 
-const calcutaleWithdraw = (withdrawSum, object) => {
+const calculateWithdraw = (withdrawSum, object) => {
   if (withdrawSum <= object.cash + object.credit) {
     if (withdrawSum <= object.cash) {
       object.cash = object.cash - withdrawSum;
@@ -53,8 +53,8 @@ const calcutaleWithdraw = (withdrawSum, object) => {
 const calculateTransfer = (transferSum, data, indexFrom, indexTo) => {
   const objectFrom = data[indexFrom];
   const objectTo = data[indexTo];
-  if (calcutaleWithdraw(transferSum, objectFrom)) {
-    calcutaleWithdraw(transferSum, objectFrom);
+  if (calculateWithdraw(transferSum, objectFrom)) {
+    calculateWithdraw(transferSum, objectFrom);
     objectTo.cash += transferSum;
     return data;
   } else {
@@ -62,19 +62,10 @@ const calculateTransfer = (transferSum, data, indexFrom, indexTo) => {
   }
 };
 
-const checkActive = (user) => {
-  if (user.isActive === true) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
 module.exports = {
   loadData,
   saveData,
   checkUserToAdd,
-  calcutaleWithdraw,
+  calculateWithdraw,
   calculateTransfer,
-  checkActive,
 };

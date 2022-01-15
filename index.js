@@ -5,9 +5,8 @@ const {
   loadData,
   saveData,
   checkUserToAdd,
-  calcutaleWithdraw,
+  calculateWithdraw,
   calculateTransfer,
-  checkActive,
 } = require("./utils.js");
 
 app.use(express.json());
@@ -26,7 +25,17 @@ app.post("/", (req, res) => {
     saveData(data);
     res.status(201).send(JSON.stringify(data));
   } else {
-    res.status(400).send("send unique user with full and correct data");
+    res
+      .status(400)
+      .send(
+        JSON.stringify({
+          ERROR: "Send unique user with full and correct data",
+          pasportId: "string or number",
+          cash: "number",
+          credit: "number",
+          isActive: "boolean",
+        })
+      );
   }
 });
 
@@ -39,7 +48,7 @@ app.put("/cash", (req, res) => {
   const user = data[editIndex];
   if (editIndex === -1) {
     res.status(400).send(`The user with id ${userIdToEdit} doesn't exist`);
-  } else if (!checkActive(user)) {
+  } else if (!user.isActive) {
     res
       .status(400)
       .send(
@@ -62,7 +71,7 @@ app.put("/credit", (req, res) => {
   const user = data[editIndex];
   if (editIndex === -1) {
     res.status(400).send(`The user with id ${userIdToEdit} doesn't exist`);
-  } else if (!checkActive(user)) {
+  } else if (!user.isActive) {
     res
       .status(400)
       .send(
@@ -83,13 +92,13 @@ app.put("/withdraw", (req, res) => {
   const index = data.findIndex((dataUser) => dataUser.pasportId == id);
   let user = data[index];
   if (index === -1) {
-    res.status(400).send(`the user with id ${id} doesn't exist`);
-  } else if (!checkActive(user)) {
+    res.status(400).send(`The user with id ${id} doesn't exist`);
+  } else if (!user.isActive) {
     res
       .status(400)
-      .send(`the user with id ${id} is not active, operations are unsuported`);
+      .send(`The user with id ${id} is not active, operations are unsuported`);
   } else {
-    user = calcutaleWithdraw(withdraw, user);
+    user = calculateWithdraw(withdraw, user);
     if (user) {
       saveData(data);
       res.status(200).send(JSON.stringify(data));
@@ -97,7 +106,7 @@ app.put("/withdraw", (req, res) => {
       res
         .status(400)
         .send(
-          `the user with id ${id} doesn't have enough money for withdraw ${withdraw}`
+          `The user with id ${id} doesn't have enough money for withdraw ${withdraw}`
         );
     }
   }
@@ -126,14 +135,14 @@ app.put("/transfer", (req, res) => {
     } else {
       res.status(400).send(`The user with id ${idUserFrom} doesn't exist`);
     }
-  } else if (!checkActive(userFrom) || !checkActive(userTo)) {
-    if (!checkActive(userFrom) && !checkActive(userTo)) {
+  } else if (!userFrom.isActive || userTo.isActive) {
+    if (!userFrom.isActive && !userTo.isActive) {
       res
         .status(400)
         .send(
           `The user with id ${idUserFrom} and id ${idUserTo} are not active, operations are unsupported`
         );
-    } else if (!checkActive(userFrom)) {
+    } else if (!userFrom.isActive) {
       res
         .status(400)
         .send(

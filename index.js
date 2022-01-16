@@ -213,8 +213,6 @@ app.get("/cash-active", (req, res) => {
   }
 });
 
-const PORT = 8000;
-
-app.listen(PORT, () => {
-  console.log("server is up on port:", PORT);
+app.listen(process.env.PORT || 8080, () => {
+  console.log("server is up on port:", process.env.PORT || 8080);
 });

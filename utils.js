@@ -28,7 +28,7 @@ const checkUserToAdd = (user) => {
     }
   });
   //pasportId may be number or string
-  const [passwordId, cash, credit, isActive] = Object.values(user);
+  const [cash, credit, isActive] = Object.values(user);
   const checkValues =
     typeof cash === "number" &&
     typeof credit === "number" &&

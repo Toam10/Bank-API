@@ -28,11 +28,13 @@ const checkUserToAdd = (user) => {
     }
   });
   //pasportId may be number or string
-  const [cash, credit, isActive] = Object.values(user);
+  console.log(user);
+  const [pasportId, cash, credit, isActive] = Object.values(user);
   const checkValues =
     typeof cash === "number" &&
     typeof credit === "number" &&
-    (isActive === false || isActive === true);
+    (isActive === "false" || isActive === "true");
+
   return checkKeys && repeatCheck && checkValues;
 };
 

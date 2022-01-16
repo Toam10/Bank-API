@@ -1,5 +1,8 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
+
+app.use(cors());
 
 const {
   loadData,
@@ -25,17 +28,15 @@ app.post("/", (req, res) => {
     saveData(data);
     res.status(201).send(JSON.stringify(data));
   } else {
-    res
-      .status(400)
-      .send(
-        JSON.stringify({
-          ERROR: "Send unique user with full and correct data",
-          pasportId: "string or number",
-          cash: "number",
-          credit: "number",
-          isActive: "boolean",
-        })
-      );
+    res.status(400).send(
+      JSON.stringify({
+        ERROR: "Send unique user with full and correct data",
+        pasportId: "string or number",
+        cash: "number",
+        credit: "number",
+        isActive: "boolean",
+      })
+    );
   }
 });
 
@@ -211,7 +212,7 @@ app.get("/cash-active", (req, res) => {
   }
 });
 
-const PORT = 3000;
+const PORT = 8000;
 
 app.listen(PORT, () => {
   console.log("server is up on port:", PORT);

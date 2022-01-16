@@ -14,6 +14,7 @@ const {
 } = require("./utils.js");
 
 app.use(express.json());
+// move it up after the app.use(cors())
 
 //get all users
 app.get("/", (req, res) => {
@@ -36,6 +37,8 @@ app.post("/", (req, res) => {
         cash: "number",
         credit: "number",
         isActive: "boolean",
+        
+        // dont JSON.stringify the error OR the data the you send and please if the error is so big make a error constants file (:
       })
     );
   }
@@ -43,6 +46,8 @@ app.post("/", (req, res) => {
 
 //add cash to user
 app.put("/cash", (req, res) => {
+   //please use const {somedata} req.body / req.params /req.query otherway is ureadable
+  
   const data = loadData();
   const userIdToEdit = req.query.userId;
   const cash = req.body.cash;
@@ -60,13 +65,16 @@ app.put("/cash", (req, res) => {
     user.cash = user.cash + cash;
     saveData(data);
     res.status(200).send(JSON.stringify(data));
+        // dont JSON.stringify the error OR the data the you send and please if the error is so big make a error constants file (:
   }
 });
 
 // to add credit
 app.put("/credit", (req, res) => {
+   //please use const {somedata} req.body / req.params /req.query otherway is ureadable
   const data = loadData();
   const userIdToEdit = req.query.userId;
+  // use one function for one thing please dont to 10 things in one function make it pure and clear
   const credit = req.body.credit;
   const editIndex = data.findIndex((user) => user.pasportId == userIdToEdit);
 
@@ -86,6 +94,8 @@ app.put("/credit", (req, res) => {
   }
 });
 
+// really large function
+
 //withdraw money
 app.put("/withdraw", (req, res) => {
   const data = loadData();
@@ -104,6 +114,7 @@ app.put("/withdraw", (req, res) => {
     if (user) {
       saveData(data);
       res.status(200).send(JSON.stringify(data));
+      // see above
     } else {
       res
         .status(400)
@@ -172,6 +183,8 @@ app.put("/transfer", (req, res) => {
   }
 });
 
+// really large function and Unreadable
+
 //get users data by id
 app.get("/users", (req, res) => {
   const data = loadData();
@@ -184,6 +197,8 @@ app.get("/users", (req, res) => {
   }
 });
 
+
+
 //get user info by amount of cash
 app.get("/cash", (req, res) => {
   const data = loadData();
@@ -195,6 +210,8 @@ app.get("/cash", (req, res) => {
     res.status(400).send(`The user with cash ${cash} not found`);
   }
 });
+
+// Unreadable
 
 //get users that are active and have more than X amount of money in cash
 app.get("/cash-active", (req, res) => {
@@ -212,6 +229,13 @@ app.get("/cash-active", (req, res) => {
       .send(`No active users are found with cash equal or more ${cash}`);
   }
 });
+
+
+// dont JSON.stringify the error OR the data the you send and please if the error is so big make a error constants file (:
+
+//please use const {somedata} req.body / req.params /req.query otherway is ureadable
+
+// use one function for one thing please dont to 10 things in one function make it pure and clear
 
 app.listen(process.env.PORT || 8080, () => {
   console.log("server is up on port:", process.env.PORT || 8080);
